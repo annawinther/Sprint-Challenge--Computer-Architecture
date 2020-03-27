@@ -101,6 +101,14 @@ class CPU:
         # so the next cycle will go from there
         self.pc = stack_value
 
+    # add JMP, JEQ and JNE instructions
+    
+    # JEQ: If `equal` flag is set (true), jump to the address stored in the given register. (01010101)
+
+    # JMP: Jump to the address stored in the given register. 
+    # Set the `PC` to the address stored in the given register.(01010100)
+
+    # JNE: If `E` flag is clear (false, 0), jump to the address stored in the given register. (01010110)
 
     def branch_operations(self):
         self.branchtable[0b10000010] = self.LDI
@@ -128,6 +136,18 @@ class CPU:
         # Multiply the values in two registers together and store the result in registerA.
         elif op == "MUL":
             self.reg[reg_a] *= self.reg[reg_b]
+
+        # add CMP operation (handeled by the ALU) (10100111)
+        # CMP Compare the values in two registers.
+        # If they are equal, set the Equal `E` flag to 1, otherwise set it to 0.
+            # self.FL = 0b00000001
+        # If registerA is less than registerB, set the Less-than `L` flag to 1,
+        # otherwise set it to 0.
+            # self.FL = 0b00000100
+        # If registerA is greater than registerB, set the Greater-than `G` flag
+        # to 1, otherwise set it to 0.
+            # self.FL = 0b00000010
+ 
         # elif op == "SUB": etc
         else:
             raise Exception("Unsupported ALU operation")
