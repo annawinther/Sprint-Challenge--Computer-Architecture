@@ -63,7 +63,17 @@ class CPU:
     # CMP compares the values in two registers. (10100111)
     def CMP(self, a, b):
         self.alu("CMP", a, b)
-        self.pc +=3
+        self.pc += 3
+
+    # Bitwise-AND the values in registerA and registerB, then store the result in registerA. (10101000)
+    def AND(self, a, b):
+        self.alu("AND", a, b)
+        self.pc += 3
+
+    # add OR operation Perform a bitwise-OR between the values in registerA and registerB, storing the result in registerA. (10101010)
+    def OR(self, a, b):
+        self.alu("OR", a, b)
+        self.pc += 3
 
     ### Stack Operations ###
     # Push the value in the given register on the stack.
@@ -136,6 +146,8 @@ class CPU:
         self.branchtable[0b10100000] = self.ADD
         self.branchtable[0b10100010] = self.MUL
         self.branchtable[0b10100111] = self.CMP
+        self.branchtable[0b10101000] = self.AND
+        self.branchtable[0b10101010] = self.OR
 
         self.branchtable[0b01000110] = self.POP
         self.branchtable[0b01000101] = self.PUSH
@@ -177,7 +189,22 @@ class CPU:
             # If registerA is greater than registerB, set the Greater-than `G` flag to 1, otherwise set it to 0.
             elif self.reg[reg_a] > self.reg[reg_b]:
                 self.FL = 0b00000010
- 
+    
+        # Add AND and OR operations:
+        # Bitwise-AND the values in registerA and registerB, then store the result in registerA
+        elif op == "AND":
+            valueA = self.reg[reg_a]
+            valueB = self.reg[reg_b]
+
+            self.reg[reg_a] = valueA & valueB
+            
+        # Perform a bitwise-OR between the values in registerA and registerB, storing the result in registerA. (10101010)
+        elif op == "OR":
+            valueA = self.reg[reg_a]
+            valueB = self.reg[reg_b]
+
+            self.reg[reg_a] = valueA | valueB
+
         # elif op == "SUB": etc
         else:
             raise Exception("Unsupported ALU operation")
