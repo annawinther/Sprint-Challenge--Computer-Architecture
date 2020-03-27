@@ -124,7 +124,10 @@ class CPU:
     # JNE: If `E` flag is clear (false, 0), jump to the address stored in the given register. (01010110)
     # otherwise increment PC by 2
     def JNE(self, a, b):
-        pass
+        if self.FL != 0b00000001:
+            self.pc = self.reg[a]
+        else:
+            self.pc += 2
 
     def branch_operations(self):
         self.branchtable[0b10000010] = self.LDI
@@ -142,6 +145,7 @@ class CPU:
 
         self.branchtable[0b01010100] = self.JMP
         self.branchtable[0b01010101] = self.JEQ
+        self.branchtable[0b01010110] = self.JNE
 
 
     def ram_read(self, adress):
