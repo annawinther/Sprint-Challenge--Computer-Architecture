@@ -20,6 +20,16 @@ class CPU:
         # add a stack pointer (SP) and set to empty at adress 0xF4
         self.stack_pointer = 0xF4
 
+        # `FL` bits: `00000LGE`
+
+        # * `L` Less-than: during a `CMP`, set to 1 if registerA is less than registerB,
+        #   zero otherwise.
+        # * `G` Greater-than: during a `CMP`, set to 1 if registerA is greater than
+        #   registerB, zero otherwise.
+        # * `E` Equal: during a `CMP`, set to 1 if registerA is equal to registerB, zero
+        #   otherwise.
+        # Initalise Flag Register in the CPU 
+        self.FL = 0b00000000
 
     def load(self, program):
         """Load a program into memory."""
