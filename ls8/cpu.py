@@ -74,7 +74,17 @@ class CPU:
     def OR(self, a, b):
         self.alu("OR", a, b)
         self.pc += 3
-
+    
+    def XOR(self, a, b):
+        pass
+    def NOT(self, a, b):
+        pass
+    def SHL(self, a, b):
+        pass
+    def SHR(self, a, b):
+        pass
+    def MOD(self, a, b):
+        pass
     ### Stack Operations ###
     # Push the value in the given register on the stack.
     def PUSH(self, a, b):
@@ -146,8 +156,14 @@ class CPU:
         self.branchtable[0b10100000] = self.ADD
         self.branchtable[0b10100010] = self.MUL
         self.branchtable[0b10100111] = self.CMP
+    
         self.branchtable[0b10101000] = self.AND
         self.branchtable[0b10101010] = self.OR
+        self.branchtable[0b10101011] = self.XOR
+        self.branchtable[0b01101001] = self.NOT
+        self.branchtable[0b10101100] = self.SHL
+        self.branchtable[0b10101101] = self.SHR
+        self.branchtable[0b10100100] = self.MOD
 
         self.branchtable[0b01000110] = self.POP
         self.branchtable[0b01000101] = self.PUSH
@@ -197,13 +213,28 @@ class CPU:
             valueB = self.reg[reg_b]
 
             self.reg[reg_a] = valueA & valueB
-            
+
         # Perform a bitwise-OR between the values in registerA and registerB, storing the result in registerA. (10101010)
         elif op == "OR":
             valueA = self.reg[reg_a]
             valueB = self.reg[reg_b]
 
             self.reg[reg_a] = valueA | valueB
+
+        # Perform a bitwise-XOR between the values in registerA and registerB, storing the result in registerA. (10101011)
+
+        # Perform a bitwise-NOT on the value in a register, storing the result in the register. (01101001)
+
+        # SHL: Shift the value in registerA left by the number of bits specified in registerB, filling the low bits with 0. (10101100)
+
+        # SHR: Shift the value in registerA right by the number of bits specified in registerB, filling the high bits with 0. (10101101)
+
+        # `MOD registerA registerB`
+        # Divide the value in the first register by the value in the second,
+        # storing the _remainder_ of the result in registerA.
+        # If the value in the second register is 0, the system should print an
+        # error message and halt. (10100100)
+
 
         # elif op == "SUB": etc
         else:
