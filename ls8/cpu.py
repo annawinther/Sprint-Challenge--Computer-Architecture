@@ -114,11 +114,15 @@ class CPU:
         self.pc = self.reg[a]
 
     # JEQ: If `equal` flag is set (true), jump to the address stored in the given register. (01010101)
+    # otherwise increment PC by 2
     def JEQ(self, a, b):
-        pass
-
+        if self.FL == 0b00000001:
+            self.pc = self.reg[a]
+        else:
+            self.pc += 2
 
     # JNE: If `E` flag is clear (false, 0), jump to the address stored in the given register. (01010110)
+    # otherwise increment PC by 2
     def JNE(self, a, b):
         pass
 
@@ -137,6 +141,8 @@ class CPU:
         self.branchtable[0b00010001] = self.RET
 
         self.branchtable[0b01010100] = self.JMP
+        self.branchtable[0b01010101] = self.JEQ
+
 
     def ram_read(self, adress):
         return self.ram[adress]
