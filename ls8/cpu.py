@@ -59,7 +59,12 @@ class CPU:
     def MUL(self, a, b):
         self.alu("MUL", a, b)
         self.pc += 3
-    
+
+    # CMP compares the values in two registers. (10100111)
+    def CMP(self, a, b):
+        self.alu("CMP", a, b)
+        self.pc +=3
+
     ### Stack Operations ###
     # Push the value in the given register on the stack.
     def PUSH(self, a, b):
@@ -113,10 +118,14 @@ class CPU:
     def branch_operations(self):
         self.branchtable[0b10000010] = self.LDI
         self.branchtable[0b01000111] = self.PRN
-        self.branchtable[0b10100010] = self.MUL
+
         self.branchtable[0b10100000] = self.ADD
+        self.branchtable[0b10100010] = self.MUL
+        self.branchtable[0b10100111] = self.CMP
+
         self.branchtable[0b01000110] = self.POP
         self.branchtable[0b01000101] = self.PUSH
+
         self.branchtable[0b01010000] = self.CALL
         self.branchtable[0b00010001] = self.RET
 
@@ -139,14 +148,16 @@ class CPU:
 
         # add CMP operation (handeled by the ALU) (10100111)
         # CMP Compare the values in two registers.
-        # If they are equal, set the Equal `E` flag to 1, otherwise set it to 0.
-            # self.FL = 0b00000001
-        # If registerA is less than registerB, set the Less-than `L` flag to 1,
-        # otherwise set it to 0.
-            # self.FL = 0b00000100
-        # If registerA is greater than registerB, set the Greater-than `G` flag
-        # to 1, otherwise set it to 0.
-            # self.FL = 0b00000010
+        elif op == "CMP":
+            # If they are equal, set the Equal `E` flag to 1, otherwise set it to 0.
+            if self.reg[reg_a] == self.reg[reg_b]:
+                self.FL = 0b00000001
+            # If registerA is less than registerB, set the Less-than `L` flag to 1, otherwise set it to 0.
+            elif self.reg[reg_a] < self.reg[reg_b]:
+                self.FL = 0b00000100
+            # If registerA is greater than registerB, set the Greater-than `G` flag to 1, otherwise set it to 0.
+            elif self.reg[reg_a] > self.reg[reg_b]:
+                self.FL = 0b00000010
  
         # elif op == "SUB": etc
         else:
