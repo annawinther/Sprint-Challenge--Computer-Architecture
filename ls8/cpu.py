@@ -108,12 +108,19 @@ class CPU:
 
     # add JMP, JEQ and JNE instructions
     
-    # JEQ: If `equal` flag is set (true), jump to the address stored in the given register. (01010101)
-
     # JMP: Jump to the address stored in the given register. 
-    # Set the `PC` to the address stored in the given register.(01010100)
+    # Set the `PC` to the address stored in the given register.(01010100) 
+    def JMP(self, a, b):
+        self.pc = self.reg[a]
+
+    # JEQ: If `equal` flag is set (true), jump to the address stored in the given register. (01010101)
+    def JEQ(self, a, b):
+        pass
+
 
     # JNE: If `E` flag is clear (false, 0), jump to the address stored in the given register. (01010110)
+    def JNE(self, a, b):
+        pass
 
     def branch_operations(self):
         self.branchtable[0b10000010] = self.LDI
@@ -128,6 +135,8 @@ class CPU:
 
         self.branchtable[0b01010000] = self.CALL
         self.branchtable[0b00010001] = self.RET
+
+        self.branchtable[0b01010100] = self.JMP
 
     def ram_read(self, adress):
         return self.ram[adress]
